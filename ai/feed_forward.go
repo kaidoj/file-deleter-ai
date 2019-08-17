@@ -11,12 +11,12 @@ func FeedForward(m *Model, inp, targets mat.Matrix) mat.Matrix {
 
 	// hidden layers
 	for i := 0; i < wlen; i++ {
-		in = activition(m, i, in)
+		in = activation(m, i, in)
 	}
 
 	// output layer
 	for i := wlen; i < wlen+1; i++ {
-		in = activition(m, i, in)
+		in = activation(m, i, in)
 	}
 
 	// calc error
@@ -26,7 +26,7 @@ func FeedForward(m *Model, inp, targets mat.Matrix) mat.Matrix {
 	return s
 }
 
-func activition(m *Model, i int, in mat.Matrix) mat.Matrix {
+func activation(m *Model, i int, in mat.Matrix) mat.Matrix {
 	w := m.weights[i]
 	b := m.biases[i]
 
