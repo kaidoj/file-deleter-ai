@@ -4,10 +4,11 @@ import (
 	"gonum.org/v1/gonum/mat"
 )
 
-func FeedForward(m *Model, inp, targets mat.Matrix) mat.Matrix {
+// FeedForward calculates prediction
+func FeedForward(m *Model, ctx *Context) *Context {
 
 	wlen := len(m.weights) - 1 // skip output layer
-	in := inp
+	in := ctx.inputs
 
 	// hidden layers
 	for i := 0; i < wlen; i++ {
@@ -21,9 +22,12 @@ func FeedForward(m *Model, inp, targets mat.Matrix) mat.Matrix {
 
 	// calc error
 	s := new(mat.Dense)
-	s.Sub(targets, in)
+	s.Sub(ctx.targets, in)
 
-	return s
+	ctx.errors = append(ctx.errors, s)
+	ctx.predictions = append(ctx.predictions, &in)
+
+	return ctx
 }
 
 func activation(m *Model, i int, in mat.Matrix) mat.Matrix {
