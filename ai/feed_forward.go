@@ -1,62 +1,37 @@
 package ai
 
-import (
-	"fmt"
-
-	"gonum.org/v1/gonum/mat"
-)
+import "fmt"
 
 // FeedForward calculates prediction
 func FeedForward(m *Model, ctx *Context) *Context {
-	wlen := len(m.weights) - 1 // skip output layer
-	in := ctx.inputs.T()
-	ctx.predictions = nil
-	ctx.errors = nil
 
-	// hidden layers
-	for i := 0; i < wlen; i++ {
-		in = activation(m, i, in)
-		ctx.predictions = append(ctx.predictions, in)
-	}
-
-	// output layer
-	for i := wlen; i < wlen+1; i++ {
-		in = activation(m, i, in)
-		ctx.predictions = append(ctx.predictions, in)
-		ctx.prediction = in
-	}
-
-	// calc error
-	s := new(mat.Dense)
-	s.Sub(ctx.target, in)
-
-	MatPrint(s)
-
-	ctx.errors = s
-
-	return ctx
-}
-
-func activation(m *Model, i int, in mat.Matrix) mat.Matrix {
-	w := m.weights[i]
-	b := m.biases[i].T()
-
+	MatPrint(m.weights)
 	fmt.Println("weights")
-	MatPrint(w)
+	MatPrint(m.Inputs)
 	fmt.Println("inputs")
-	MatPrint(in)
-
-	dot := new(mat.Dense)
-	dot.Mul(w, in)
-
-	bz := new(mat.Dense)
-	addBias := func(_, col int, v float64) float64 { return v + b.At(col, 0) }
-	bz.Apply(addBias, dot)
-
-	a := new(mat.Dense)
-	a.Apply(calcSigmoid, bz)
-
-	return a
+	ctx.hiddenInputs = Dot(m.weights, m.Inputs)
+	MatPrint(ctx.hiddenInputs)
+	fmt.Println("h inputs")
+	ctx.hiddenPredictions = Apply(calcSigmoid, ctx.hiddenInputs)
+	MatPrint(ctx.hiddenPredictions)
+	fmt.Println("predictions")
+	MatPrint(m.outputWeights)
+	fmt.Println("o weights")
+	ctx.outputs = Dot(m.outputWeights, ctx.hiddenPredictions)
+	MatPrint(ctx.outputs)
+	fmt.Println("o outputs")
+	ctx.outputPredictions = Apply(calcSigmoid, ctx.outputs)
+	MatPrint(ctx.outputPredictions)
+	fmt.Println("o predictions")
+	MatPrint(m.Outputs)
+	fmt.Println("targets")
+	ctx.outputErrors = Substract(m.Outputs, ctx.outputPredictions)
+	MatPrint(ctx.outputErrors)
+	fmt.Println("outputErrors")
+	ctx.hiddenErrors = Dot(m.outputWeights.T(), ctx.outputErrors)
+	MatPrint(ctx.hiddenErrors)
+	fmt.Println("hiddenErrors")
+	return ctx
 }
 
 func calcSigmoid(_, _ int, v float64) float64 {

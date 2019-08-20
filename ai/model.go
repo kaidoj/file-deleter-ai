@@ -6,67 +6,54 @@ import (
 	"gonum.org/v1/gonum/mat"
 )
 
-type Model struct {
-	weights     []mat.Matrix
-	biases      []*mat.Dense
-	layers      []int
-	inputs      int
-	outputs     int
-	learingRate float64
-	epochs      int
+type ModelConfig struct {
+	LearingRate   float64
+	Epochs        int
+	HiddenNeurons int
+	InputsCount   int
+	OutputsCount  int
+	Inputs        mat.Matrix
+	Outputs       mat.Matrix
 }
 
-// NewModel creates new model
-func NewModel(hl []int, inputs, outputs int, lr float64, e int) *Model {
-	model := &Model{}
-	model.layers = hl
-	model.inputs = inputs
-	model.outputs = outputs
-	model.learingRate = lr
-	model.epochs = e
+type Model struct {
+	*ModelConfig
+	weights       mat.Matrix
+	outputWeights mat.Matrix
+	biases        mat.Matrix
+	outputBias    mat.Matrix
+}
 
-	// generate random weights
-	model.weights = model.randomize()
+// NewModel starts new model with random weights
+func NewModel(config *ModelConfig) *Model {
+	model := &Model{
+		config,
+		nil,
+		nil,
+		nil,
+		mat.NewDense(1, 1, []float64{1}),
+	}
 
-	// generate random biases
-	model.biases = model.randomizeBias()
+	// generate random weights for hidden layers
+	iRow, _ := model.Inputs.Dims()
+	model.weights = model.randomize(model.HiddenNeurons, iRow)
+
+	// generate random biases for hidden layers
+	model.biases = model.randomize(1, model.HiddenNeurons)
+
+	// generate random output weights
+	oRow, _ := model.Outputs.Dims()
+	model.outputWeights = model.randomize(oRow, model.HiddenNeurons)
 
 	return model
 }
 
 // Generate randomized values for matrix
-func (m *Model) randomize() []mat.Matrix {
-	var res []mat.Matrix
-	lenL := len(m.layers) - 1
-	for i := 0; i < lenL; i++ {
-		l := m.layers[i]
-		data := make([]float64, m.inputs*l)
-		for j := range data {
-			data[j] = rand.NormFloat64()
-		}
-		res = append(res, mat.NewDense(l, m.inputs, data))
+func (m *Model) randomize(rows, cols int) mat.Matrix {
+	data := make([]float64, rows*cols)
+	for j := range data {
+		data[j] = rand.NormFloat64()
 	}
 
-	//output layer
-	data := make([]float64, m.layers[lenL-1])
-	for i := range data {
-		data[i] = rand.NormFloat64()
-	}
-	res = append(res, mat.NewDense(1, m.layers[lenL-1], data))
-
-	return res
-}
-
-// Generate randomized bias values for matrix
-func (m *Model) randomizeBias() []*mat.Dense {
-	var res []*mat.Dense
-	for _, l := range m.layers {
-		data := make([]float64, l)
-		for i := range data {
-			data[i] = rand.NormFloat64()
-		}
-		res = append(res, mat.NewDense(l, 1, data))
-	}
-
-	return res
+	return mat.NewDense(rows, cols, data)
 }

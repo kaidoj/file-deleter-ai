@@ -58,9 +58,10 @@ func MultiplyElem(m, n mat.Matrix) *mat.Dense {
 }
 
 func Substract(m, n mat.Matrix) *mat.Dense {
-	r := new(mat.Dense)
-	r.Sub(m, n)
-	return r
+	r, c := m.Dims()
+	o := mat.NewDense(r, c, nil)
+	o.Sub(m, n)
+	return o
 }
 
 func Dot(m, n mat.Matrix) *mat.Dense {
@@ -82,5 +83,12 @@ func Add(m, n mat.Matrix) *mat.Dense {
 	r, c := m.Dims()
 	o := mat.NewDense(r, c, nil)
 	o.Add(m, n)
+	return o
+}
+
+func Apply(fn func(i, j int, v float64) float64, m mat.Matrix) mat.Matrix {
+	r, c := m.Dims()
+	o := mat.NewDense(r, c, nil)
+	o.Apply(fn, m)
 	return o
 }

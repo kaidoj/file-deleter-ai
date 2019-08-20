@@ -17,6 +17,7 @@ type DataReader interface {
 // Read loads CSV file contents into Matrix
 func Read(filename string, iCols, oCols []int) (*mat.Dense, *mat.Dense) {
 	csvFile, _ := os.Open(filename)
+	defer csvFile.Close()
 	reader := csv.NewReader(bufio.NewReader(csvFile))
 	reader.Comma = ';'
 
