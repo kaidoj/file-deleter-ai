@@ -10,7 +10,5 @@ func Predict(m *Model, ctx *Context) mat.Matrix {
 	ctx.outputs = Dot(ctx.hiddenPredictions, m.outputWeights.T())
 	ctx.outputPredictions = Apply(calcSigmoid, ctx.outputs)
 	errors := Substract(m.Outputs, ctx.outputPredictions)
-	//ctx.outputErrors = Apply(calcAbs, ctx.outputErrors)
-	//ctx.hiddenErrors = Dot(ctx.outputErrors, m.outputWeights)
 	return errors
 }

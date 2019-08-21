@@ -13,14 +13,14 @@ func main() {
 	// define output cols in data
 	oCols := []int{3}
 	// define hidden layers and neurons
-	hiddenLayerNeurons := 3 // 3
+	hiddenLayerNeurons := 5 // 3
 
 	// setup data
 	inp, outp := ai.Read("data/train500.csv", iCols, oCols)
 
 	config := &ai.ModelConfig{
-		0.01,
-		5000,
+		0.001,
+		20000,
 		hiddenLayerNeurons,
 		len(iCols),
 		len(oCols),
