@@ -1,44 +1,19 @@
 package ai
 
-import "fmt"
-
 // Backpropagation recalculates weights and biases
 func Backpropagation(m *Model, ctx *Context) {
 
 	//output layer
-	MatPrint(ctx.outputErrors)
-	fmt.Println("outputErrors")
-
-	MatPrint(ctx.outputPredictions)
-	fmt.Println("o predictions")
-
-	MatPrint(ctx.hiddenPredictions)
-	fmt.Println("h predictions")
-
-	MatPrint(m.outputWeights)
-	fmt.Println("output weights")
-
-	mul := Multiply(SigmoidPrime(ctx.outputPredictions), ctx.outputErrors.T())
-	MatPrint(mul)
-	fmt.Println("multiply")
-
-	d := Dot(mul, ctx.hiddenPredictions)
-	MatPrint(d)
-	fmt.Println("dot")
-
+	mul := MultiplyElem(ctx.outputErrors, SigmoidPrime(ctx.outputPredictions))
+	d := Multiply(mul.T(), ctx.hiddenPredictions)
 	s := Scale(m.LearingRate, d)
-	MatPrint(s)
-	fmt.Println("scale")
+	a := Add(s, m.outputWeights)
+	m.outputWeights = a
 
-	a := Add(m.outputWeights, s)
-	MatPrint(a)
-	fmt.Println("add")
-
-	m.weights = a
-
-	// hidden layer
-	/*m.weights = Add(m.weights,
-	Scale(m.LearingRate,
-		Dot(Multiply(ctx.hiddenErrors, SigmoidPrime(ctx.hiddenPredictions)),
-			ctx.inputs)))*/
+	//hidden layer
+	hmul := MultiplyElem(ctx.hiddenErrors, SigmoidPrime(ctx.hiddenPredictions))
+	hd := Multiply(hmul.T(), m.Inputs)
+	hs := Scale(m.LearingRate, hd)
+	ha := Add(hs, m.weights)
+	m.weights = ha
 }

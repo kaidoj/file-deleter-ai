@@ -16,7 +16,7 @@ func Dsigmoid(y float64) float64 {
 
 func SigmoidPrime(m mat.Matrix) *mat.Dense {
 	rows, cols := m.Dims()
-	o := make([]float64, rows)
+	o := make([]float64, rows*cols)
 	for i := range o {
 		o[i] = 1
 	}

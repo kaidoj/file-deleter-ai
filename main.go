@@ -18,7 +18,7 @@ func main() {
 
 	config := &ai.ModelConfig{
 		0.1,
-		2,
+		5000,
 		hiddenLayerNeurons,
 		len(iCols),
 		len(oCols),
