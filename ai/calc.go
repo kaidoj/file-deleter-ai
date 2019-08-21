@@ -21,15 +21,7 @@ func SigmoidPrime(m mat.Matrix) *mat.Dense {
 		o[i] = 1
 	}
 	ones := mat.NewDense(rows, cols, o)
-	//fmt.Println("---sigm-start---")
-	//MatPrint(ones)
-	//fmt.Println("m")
-	//MatPrint(m)
-	//fmt.Println("Sub")
-	sub := Substract(ones, m)
-	//MatPrint(sub)
-	//fmt.Println("---sigm-end---")
-	return MultiplyElem(m, sub)
+	return MultiplyElem(m, Substract(ones, m))
 }
 
 func Cost(prediction float64, target float64) float64 {
