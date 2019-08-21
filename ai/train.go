@@ -1,8 +1,6 @@
 package ai
 
 import (
-	"fmt"
-
 	"gonum.org/v1/gonum/mat"
 )
 
@@ -12,18 +10,21 @@ type Context struct {
 	hiddenPredictions mat.Matrix
 	outputs           mat.Matrix
 	outputPredictions mat.Matrix
-	outputErrors      mat.Matrix
+	OutputErrors      mat.Matrix
 	hiddenErrors      mat.Matrix
 }
 
 // Train the model
-func Train(model *Model) {
+func Train(model *Model) (*Model, *Context) {
 	ctx := &Context{}
 	for i := 0; i <= model.Epochs; i++ {
 		FeedForward(model, ctx)
 		Backpropagation(model, ctx)
 	}
 
-	fmt.Println("Training results")
-	MatPrint(ctx.outputErrors)
+	//fmt.Println("Training results")
+	//MatPrint(ctx.OutputErrors)
+	//fmt.Println(Accuracy(model, ctx))
+
+	return model, ctx
 }

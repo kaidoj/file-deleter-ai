@@ -21,6 +21,7 @@ func SigmoidPrime(m mat.Matrix) *mat.Dense {
 		o[i] = 1
 	}
 	ones := mat.NewDense(rows, cols, o)
+
 	return MultiplyElem(m, Substract(ones, m))
 }
 

@@ -34,7 +34,7 @@ func String2float64(v string) float64 {
 	return f
 }
 
-// MatPrint prints matrix data
+// MatPrint prints matrix data readable format
 func MatPrint(X mat.Matrix) {
 	fa := mat.Formatted(X, mat.Prefix(""), mat.Squeeze())
 	fmt.Printf("%v\n", fa)

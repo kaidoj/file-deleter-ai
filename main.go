@@ -1,23 +1,25 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/kaidoj/file-deleter-ai/ai"
 )
 
 func main() {
 
 	// define input cols in data
-	iCols := []int{2, 3}
+	iCols := []int{2} //3
 	// define output cols in data
 	oCols := []int{3}
 	// define hidden layers and neurons
-	hiddenLayerNeurons := 3
+	hiddenLayerNeurons := 3 // 3
 
 	// setup data
-	inp, outp := ai.Read("data/train_keep1.csv", iCols, oCols)
+	inp, outp := ai.Read("data/train500.csv", iCols, oCols)
 
 	config := &ai.ModelConfig{
-		0.1,
+		0.01,
 		5000,
 		hiddenLayerNeurons,
 		len(iCols),
@@ -27,5 +29,12 @@ func main() {
 	}
 
 	model := ai.NewModel(config)
-	ai.Train(model)
+	m, ctx := ai.Train(model)
+	// setup data
+	in, out := ai.Read("data/train_keep1.csv", iCols, oCols)
+	m.Inputs = in
+	m.Outputs = out
+	errors := ai.Predict(m, ctx)
+	fmt.Println("Test results")
+	ai.MatPrint(errors)
 }

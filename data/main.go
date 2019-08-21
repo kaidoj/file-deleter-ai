@@ -2,6 +2,8 @@ package main
 
 import (
 	"encoding/csv"
+	"flag"
+	"fmt"
 	"log"
 	"math/rand"
 	"os"
@@ -9,8 +11,13 @@ import (
 	"time"
 )
 
+var rows int
+
 // Generate dummy data
 func main() {
+
+	flag.IntVar(&rows, "rows", 100, "How many rows we want into file")
+	flag.Parse()
 
 	rand.Seed(time.Now().Unix())
 	var data [][]string
@@ -47,7 +54,8 @@ func checkError(message string, err error) {
 func generateRows(data [][]string) [][]string {
 
 	time := time.Now()
-	for i := 1; i <= 100; i++ {
+	fmt.Println(rows)
+	for i := 1; i <= rows; i++ {
 		rnd := randNr(1, 5)
 		ntime := time.AddDate(0, -rnd, 0)
 

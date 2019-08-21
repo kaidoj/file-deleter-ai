@@ -4,7 +4,7 @@ package ai
 func Backpropagation(m *Model, ctx *Context) {
 
 	//output layer
-	mul := MultiplyElem(ctx.outputErrors, SigmoidPrime(ctx.outputPredictions))
+	mul := MultiplyElem(ctx.OutputErrors, SigmoidPrime(ctx.outputPredictions))
 	d := Multiply(mul.T(), ctx.hiddenPredictions)
 	s := Scale(m.LearingRate, d)
 	a := Add(s, m.outputWeights)
