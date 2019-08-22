@@ -22,6 +22,6 @@ func Accuracy(m *Model, ctx *Context) float64 {
 	return 00
 }
 
-/*func calcAbs(_, _ int, v float64) float64 {
+func calcAbs(_, _ int, v float64) float64 {
 	return math.Abs(v)
-}*/
+}

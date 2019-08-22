@@ -19,8 +19,8 @@ func main() {
 	inp, outp := ai.Read("data/train500.csv", iCols, oCols)
 
 	config := &ai.ModelConfig{
-		0.001,
-		20000,
+		0.0002,
+		35000,
 		hiddenLayerNeurons,
 		len(iCols),
 		len(oCols),
