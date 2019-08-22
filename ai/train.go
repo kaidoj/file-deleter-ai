@@ -15,7 +15,7 @@ type Context struct {
 }
 
 // Train the model
-func Train(model *Model) (*Model, *Context, mat.Matrix, mat.Matrix) {
+func Train(model *Model) (*Model, *Context, *mat.Dense, *mat.Dense) {
 	ctx := &Context{}
 	for i := 0; i <= model.Epochs; i++ {
 		FeedForward(model, ctx)

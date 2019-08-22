@@ -3,25 +3,40 @@ package ai
 import (
 	"fmt"
 	"math"
+
+	"gonum.org/v1/gonum/mat"
 )
 
-func Accuracy(m *Model, ctx *Context) float64 {
+func Accuracy(p, in, out mat.Matrix) (int, int) {
+	tp := getTruePositives(p, out)
+	fmt.Printf("True positives: %v\r\n", tp)
+	a := getAccuracy(tp, out)
+	fmt.Printf("Accuracy %v percent\r\n", a)
 
-	oe := Apply(calcAbs, ctx.OutputErrors)
-	r, _ := oe.Dims()
-	for i := 0; i < r; i++ {
-		output := m.Outputs.At(i, 0)
-		fmt.Println(output)
-		got := oe.At(i, 0)
-		percent := 100 - math.Round((got/1)*100)
-
-		fmt.Printf("Out %v; Err %v; Perc %v% \r\n", output, got, percent)
-
-	}
-
-	return 00
+	return tp, a
 }
 
-func calcAbs(_, _ int, v float64) float64 {
-	return math.Abs(v)
+func getTruePositives(m, out mat.Matrix) int {
+	res := 0
+	r, _ := m.Dims()
+	for i := 0; i < r; i++ {
+		v := m.At(i, 0)
+		actual := out.At(i, 0)
+		//fmt.Printf("Pred: %v; Actual: %v\r\n", math.Round(v), actual)
+		if math.Round(v) != actual {
+			continue
+		}
+
+		res++
+	}
+
+	return res
+}
+
+func getAccuracy(tp int, out mat.Matrix) int {
+	r, _ := out.Dims()
+
+	a := (tp / r) * 100
+
+	return a
 }

@@ -7,7 +7,6 @@ import (
 )
 
 func main() {
-
 	// define input cols in data
 	iCols := []int{2} //3
 	// define output cols in data
@@ -30,11 +29,15 @@ func main() {
 
 	model := ai.NewModel(config)
 	_, _, weights, outputWeights := ai.Train(model)
+	ai.Save(weights, outputWeights)
 	// setup data
-	in, out := ai.Read("data/train_keep1.csv", iCols, oCols)
+	in, out := ai.Read("data/train_keep_large.csv", iCols, oCols)
+	//weights, outputWeights := ai.Load()
 	errors, predictions := ai.Predict(weights, outputWeights, in, out)
 	fmt.Println("Test results")
 	ai.MatPrint(predictions)
 	fmt.Println("predictions")
 	ai.MatPrint(errors)
+	fmt.Println("Accuracy")
+	ai.Accuracy(predictions, in, out)
 }
