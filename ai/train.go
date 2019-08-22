@@ -15,7 +15,7 @@ type Context struct {
 }
 
 // Train the model
-func Train(model *Model) (*Model, *Context) {
+func Train(model *Model) (*Model, *Context, mat.Matrix, mat.Matrix) {
 	ctx := &Context{}
 	for i := 0; i <= model.Epochs; i++ {
 		FeedForward(model, ctx)
@@ -26,5 +26,5 @@ func Train(model *Model) (*Model, *Context) {
 	//MatPrint(ctx.OutputErrors)
 	//fmt.Println(Accuracy(model, ctx))
 
-	return model, ctx
+	return model, ctx, model.weights, model.outputWeights
 }

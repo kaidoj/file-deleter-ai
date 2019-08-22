@@ -4,11 +4,11 @@ import (
 	"gonum.org/v1/gonum/mat"
 )
 
-func Predict(m *Model, ctx *Context) (mat.Matrix, mat.Matrix) {
-	ctx.hiddenInputs = Dot(m.Inputs, m.weights.T())
-	ctx.hiddenPredictions = Apply(calcSigmoid, ctx.hiddenInputs)
-	ctx.outputs = Dot(ctx.hiddenPredictions, m.outputWeights.T())
-	ctx.outputPredictions = Apply(calcSigmoid, ctx.outputs)
-	errors := Substract(m.Outputs, ctx.outputPredictions)
-	return errors, ctx.outputPredictions
+func Predict(weights, outputWeights, inputs, outputs mat.Matrix) (mat.Matrix, mat.Matrix) {
+	hiddenInputs := Dot(inputs, weights.T())
+	hiddenPredictions := Apply(calcSigmoid, hiddenInputs)
+	outputsDot := Dot(hiddenPredictions, outputWeights.T())
+	outputPredictions := Apply(calcSigmoid, outputsDot)
+	errors := Substract(outputs, outputPredictions)
+	return errors, outputPredictions
 }

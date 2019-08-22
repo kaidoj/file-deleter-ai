@@ -29,12 +29,10 @@ func main() {
 	}
 
 	model := ai.NewModel(config)
-	m, ctx := ai.Train(model)
+	_, _, weights, outputWeights := ai.Train(model)
 	// setup data
 	in, out := ai.Read("data/train_keep1.csv", iCols, oCols)
-	m.Inputs = in
-	m.Outputs = out
-	errors, predictions := ai.Predict(m, ctx)
+	errors, predictions := ai.Predict(weights, outputWeights, in, out)
 	fmt.Println("Test results")
 	ai.MatPrint(predictions)
 	fmt.Println("predictions")
