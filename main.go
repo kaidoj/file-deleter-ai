@@ -33,11 +33,10 @@ func main() {
 	// setup data
 	in, out := ai.Read("data/train_keep_large.csv", iCols, oCols)
 	//weights, outputWeights := ai.Load()
-	errors, predictions := ai.Predict(weights, outputWeights, in, out)
+	predictions := ai.Predict(weights, outputWeights, in)
 	fmt.Println("Test results")
 	ai.MatPrint(predictions)
 	fmt.Println("predictions")
-	ai.MatPrint(errors)
 	fmt.Println("Accuracy")
 	ai.Accuracy(predictions, in, out)
 }
