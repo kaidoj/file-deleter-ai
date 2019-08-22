@@ -34,7 +34,9 @@ func main() {
 	in, out := ai.Read("data/train_keep1.csv", iCols, oCols)
 	m.Inputs = in
 	m.Outputs = out
-	errors := ai.Predict(m, ctx)
+	errors, predictions := ai.Predict(m, ctx)
 	fmt.Println("Test results")
+	ai.MatPrint(predictions)
+	fmt.Println("predictions")
 	ai.MatPrint(errors)
 }
