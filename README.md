@@ -9,7 +9,7 @@ It's using matrix algebra.
 
 ### How to run
 
-Copy [this rar](https://github.com/kaidoj/file-deleter-ai/blob/master/juku/build/juku-ai.rar) and extract it anywhere on your pc
+Copy [this rar](https://github.com/kaidoj/file-deleter-ai/raw/master/juku/build/juku-ai.rar) and extract it anywhere on your pc
 and run ```juku-ai.exe```.
 
 ### Todo
