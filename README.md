@@ -7,6 +7,10 @@ It's using matrix algebra.
 
 **Doesn't delete any files**
 
+### Example
+
+![Juku AI](juku-ai.gif)
+
 ### How to run
 
 Copy [this rar](https://github.com/kaidoj/file-deleter-ai/raw/master/juku/build/juku-ai.rar) and extract it anywhere on your Windows PC and run ```juku-ai.exe```.
